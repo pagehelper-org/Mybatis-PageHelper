@@ -562,16 +562,19 @@ public class Page<E> extends ArrayList<E> implements Closeable {
 
     public <E> Page<E> doSelectPage(ISelect select) {
         select.doSelect();
+        this.close();
         return (Page<E>) this;
     }
 
     public <E> PageInfo<E> doSelectPageInfo(ISelect select) {
         select.doSelect();
+        this.close();
         return (PageInfo<E>) this.toPageInfo();
     }
 
     public <E> PageSerializable<E> doSelectPageSerializable(ISelect select) {
         select.doSelect();
+        this.close();
         return (PageSerializable<E>) this.toPageSerializable();
     }
 
