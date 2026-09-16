@@ -82,7 +82,7 @@ public class PageAutoDialect {
 
         registerDialectAlias("derby", SqlServer2012Dialect.class);
         //达梦数据库,https://github.com/mybatis-book/book/issues/43
-        registerDialectAlias("dm", OracleDialect.class);
+        registerDialectAlias("dm", DmDialect.class);
         //阿里云PPAS数据库,https://github.com/pagehelper/Mybatis-PageHelper/issues/281
         registerDialectAlias("edb", OracleDialect.class);
         //神通数据库
