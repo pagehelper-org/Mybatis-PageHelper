@@ -57,7 +57,7 @@ PageHelper 默认使用 JSqlParser 4.7。如需使用其他版本的 JSqlParser�
 | 4.5 | sqlparser4.5 | 支持 JSqlParser 4.5 |
 | 4.7 | 默认（无需额外配置） | PageHelper 默认版本 |
 | 4.9 / 5.0 | sqlparser4.9 | JSqlParser 5.0 与 4.9 API 兼容 |
-| 5.1 / 5.2 / 5.3 | sqlparser5.1 | 支持 JSqlParser 5.1+（API 兼容） |
+| 5.1 / 5.2 / 5.3 / 5.4 | sqlparser5.1 | 支持 JSqlParser 5.1+（API 兼容） |
 
 例如，使用 JSqlParser 4.9：
 
@@ -79,6 +79,8 @@ PageHelper 默认使用 JSqlParser 4.7。如需使用其他版本的 JSqlParser�
     <version>最新版本</version>
 </dependency>
 ```
+
+如需使用 JSqlParser 5.4，可选择 `sqlparser5.1` 模块并显式指定 `jsqlparser` 版本为 `5.4`。
 
 如需 SQL 解析超时保护（10秒超时），可额外引入：
 

@@ -16,7 +16,7 @@
 - Add relevant comments to improve code readability **by yesAnd**
 - Resolve dependency security vulnerabilities, update related component versions
 - Maven publishing migrated from legacy OSSRH (oss.sonatype.org) to new Maven Central Portal (central.sonatype.com)
-- pagehelper-sqlparser upgraded to 6.1.1, added sqlparser4.9 and sqlparser5.1 modules for JSqlParser 4.9/5.0/5.1/5.2/5.3 support
+- pagehelper-sqlparser upgraded to 6.1.1, added sqlparser4.9 and sqlparser5.1 modules for JSqlParser 4.9/5.0/5.1/5.2/5.3/5.4 support
 
 #### Compatibility Notes
 - This version maintains backward compatibility with previous versions

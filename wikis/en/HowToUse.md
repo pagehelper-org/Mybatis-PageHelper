@@ -57,7 +57,7 @@ PageHelper uses JSqlParser 4.7 by default. To use a different version of JSqlPar
 | 4.5 | sqlparser4.5 | Supports JSqlParser 4.5 |
 | 4.7 | Default (no extra config) | PageHelper default version |
 | 4.9 / 5.0 | sqlparser4.9 | JSqlParser 5.0 is API-compatible with 4.9 |
-| 5.1 / 5.2 / 5.3 | sqlparser5.1 | Supports JSqlParser 5.1+ (API-compatible) |
+| 5.1 / 5.2 / 5.3 / 5.4 | sqlparser5.1 | Supports JSqlParser 5.1+ (API-compatible) |
 
 For example, to use JSqlParser 4.9:
 
@@ -79,6 +79,8 @@ For example, to use JSqlParser 4.9:
     <version>latestVersion</version>
 </dependency>
 ```
+
+To use JSqlParser 5.4, select the `sqlparser5.1` module and explicitly set the `jsqlparser` dependency version to `5.4`.
 
 For SQL parsing timeout protection (10-second timeout), add the following dependency:
 

@@ -17,7 +17,7 @@
 - 补充相关注释信息，提高代码可读性 **by yesAnd**
 - 解决依赖安全漏洞，更新相关组件版本
 - Maven 发布从旧 OSSRH (oss.sonatype.org) 迁移到新的 Maven Central Portal (central.sonatype.com)
-- pagehelper-sqlparser 同步升级至 6.1.1，新增 sqlparser4.9 和 sqlparser5.1 模块，支持 JSqlParser 4.9/5.0/5.1/5.2/5.3
+- pagehelper-sqlparser 同步升级至 6.1.1，新增 sqlparser4.9 和 sqlparser5.1 模块，支持 JSqlParser 4.9/5.0/5.1/5.2/5.3/5.4
 
 #### 兼容性说明
 - 本版本与之前版本保持向后兼容
