@@ -51,6 +51,7 @@ public class SqlSafeUtilTest {
 
 		// 验证 issue #707 问题
 		assertSql(false, "databaseType desc,orderNum desc");
+		assertSql(false, "case_col, when_col, then_col, end_col");
 		// 验证 issue #854 问题
 		assertSql(true, "case when current_user regexp 0x726f6f74 then uuid else id end ASC");
 	}

@@ -58,6 +58,16 @@ public class SqlSafeUtil {
     }
 
     private static boolean containsCaseWhen(String value) {
+        String[] orderItems = value.split(",");
+        for (String item : orderItems) {
+            if (containsCaseWhenInItem(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean containsCaseWhenInItem(String value) {
         int caseIndex = indexOfWord(value, "case", 0);
         if (caseIndex < 0) {
             return false;
