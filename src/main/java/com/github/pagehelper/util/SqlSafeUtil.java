@@ -58,37 +58,40 @@ public class SqlSafeUtil {
     }
 
     private static boolean containsCaseWhen(String value) {
-        String[] orderItems = value.split(",");
-        for (String item : orderItems) {
-            if (containsCaseWhenInItem(item)) {
-                return true;
+        int start = 0;
+        for (int i = 0; i <= value.length(); i++) {
+            if (i == value.length() || value.charAt(i) == ',') {
+                if (containsCaseWhenInItem(value, start, i)) {
+                    return true;
+                }
+                start = i + 1;
             }
         }
         return false;
     }
 
-    private static boolean containsCaseWhenInItem(String value) {
-        int caseIndex = indexOfWord(value, "case", 0);
+    private static boolean containsCaseWhenInItem(String value, int start, int end) {
+        int caseIndex = indexOfWord(value, "case", start, end);
         if (caseIndex < 0) {
             return false;
         }
-        int whenIndex = indexOfWord(value, "when", caseIndex + 4);
+        int whenIndex = indexOfWord(value, "when", caseIndex + 4, end);
         if (whenIndex < 0) {
             return false;
         }
-        int thenIndex = indexOfWord(value, "then", whenIndex + 4);
+        int thenIndex = indexOfWord(value, "then", whenIndex + 4, end);
         if (thenIndex < 0) {
             return false;
         }
-        return indexOfWord(value, "end", thenIndex + 4) >= 0;
+        return indexOfWord(value, "end", thenIndex + 4, end) >= 0;
     }
 
-    private static int indexOfWord(String value, String word, int fromIndex) {
-        int maxIndex = value.length() - word.length();
+    private static int indexOfWord(String value, String word, int fromIndex, int endIndex) {
+        int maxIndex = endIndex - word.length();
         for (int i = fromIndex; i <= maxIndex; i++) {
             if (value.regionMatches(true, i, word, 0, word.length())
                     && (i == 0 || !isWordChar(value.charAt(i - 1)))
-                    && (i + word.length() == value.length() || !isWordChar(value.charAt(i + word.length())))) {
+                    && (i + word.length() == endIndex || !isWordChar(value.charAt(i + word.length())))) {
                 return i;
             }
         }
