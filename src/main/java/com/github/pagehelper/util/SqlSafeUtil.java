@@ -43,6 +43,10 @@ public class SqlSafeUtil {
      * 参考: mybatis-plus-core/src/main/java/com/baomidou/mybatisplus/core/toolkit/sql/SqlInjectionUtils.java
      */
     private static final Pattern SQL_COMMENT_PATTERN = Pattern.compile("'.*(or|union|--|#|/*|;)", Pattern.CASE_INSENSITIVE);
+    /**
+     * CASE WHEN 表达式检查正则
+     */
+    private static final Pattern SQL_CASE_WHEN_PATTERN = Pattern.compile("\\bcase\\b\\s+.*\\bwhen\\b\\s+.*\\bthen\\b\\s+.*\\bend\\b", Pattern.CASE_INSENSITIVE);
 
     /**
      * 检查参数是否存在 SQL 注入
@@ -55,6 +59,6 @@ public class SqlSafeUtil {
             return false;
         }
         // 不允许使用任何函数（不能出现括号），否则无法检测后面这个注入 order by id,if(1=2,1,(sleep(100)));
-        return value.contains("(") || SQL_COMMENT_PATTERN.matcher(value).find() || SQL_SYNTAX_PATTERN.matcher(value).find();
+        return value.contains("(") || SQL_COMMENT_PATTERN.matcher(value).find() || SQL_SYNTAX_PATTERN.matcher(value).find() || SQL_CASE_WHEN_PATTERN.matcher(value).find();
     }
 }
