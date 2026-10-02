@@ -31,6 +31,7 @@ import com.github.pagehelper.PageRowBounds;
 import com.github.pagehelper.util.ExecutorUtil;
 import com.github.pagehelper.util.MetaObjectUtil;
 import com.github.pagehelper.util.StringUtil;
+import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.mapping.BoundSql;
@@ -114,13 +115,13 @@ public abstract class AbstractHelperDialect extends AbstractDialect implements C
         }
         Map<String, Object> paramMap = null;
         if (parameterObject == null) {
-            paramMap = new HashMap<String, Object>();
+            paramMap = new MapperMethod.ParamMap<Object>();
         } else if (parameterObject instanceof Map) {
             //解决不可变Map的情况
-            paramMap = new HashMap<String, Object>();
+            paramMap = new MapperMethod.ParamMap<Object>();
             paramMap.putAll((Map) parameterObject);
         } else {
-            paramMap = new HashMap<String, Object>();
+            paramMap = new MapperMethod.ParamMap<Object>();
             // sqlSource为ProviderSqlSource时，处理只有1个参数的情况
             if (ms.getSqlSource() instanceof ProviderSqlSource) {
                 String[] providerMethodArgumentNames = ExecutorUtil.getProviderMethodArgumentNames((ProviderSqlSource) ms.getSqlSource());
@@ -145,7 +146,7 @@ public abstract class AbstractHelperDialect extends AbstractDialect implements C
                     String name = parameterMapping.getProperty();
                     if (!name.equals(PAGEPARAMETER_FIRST)
                             && !name.equals(PAGEPARAMETER_SECOND)
-                            && paramMap.get(name) == null) {
+                            && (!paramMap.containsKey(name) || paramMap.get(name) == null)) {
                         if (hasTypeHandler
                                 || parameterMapping.getJavaType().equals(parameterObject.getClass())) {
                             paramMap.put(name, parameterObject);
