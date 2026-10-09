@@ -79,7 +79,18 @@ public class PageHelper extends PageMethod implements Dialect, BoundSqlIntercept
 
     @Override
     public boolean isAsyncCount() {
-        return getLocalPage().asyncCount();
+        Page<?> page = getLocalPage();
+        // 异步 count 在 afterCount 之前执行，不能靠总数跳过数据查询。
+        // 只有还会执行数据查询时才保留请求里的异步设置：pageSize > 0，
+        // 或 pageSize = 0 且 pageSizeZero = true（返回全部结果）。
+        // pageSize < 0，以及 pageSize = 0 且 pageSizeZero 不为 true 时只查总数，
+        // 改走同步 count，让 afterCount 提前返回；不修改 Page 上保存的异步设置。
+        int pageSize = page.getPageSize();
+        boolean pageSizeZero = page.getPageSizeZero() != null && page.getPageSizeZero();
+        if (pageSize > 0 || (pageSize == 0 && pageSizeZero)) {
+            return page.asyncCount();
+        }
+        return false;
     }
 
     @Override
