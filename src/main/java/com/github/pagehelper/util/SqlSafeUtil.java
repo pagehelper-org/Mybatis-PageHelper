@@ -43,7 +43,6 @@ public class SqlSafeUtil {
      * 参考: mybatis-plus-core/src/main/java/com/baomidou/mybatisplus/core/toolkit/sql/SqlInjectionUtils.java
      */
     private static final Pattern SQL_COMMENT_PATTERN = Pattern.compile("'.*(or|union|--|#|/*|;)", Pattern.CASE_INSENSITIVE);
-
     /**
      * 检查参数是否存在 SQL 注入
      *
@@ -55,6 +54,51 @@ public class SqlSafeUtil {
             return false;
         }
         // 不允许使用任何函数（不能出现括号），否则无法检测后面这个注入 order by id,if(1=2,1,(sleep(100)));
-        return value.contains("(") || SQL_COMMENT_PATTERN.matcher(value).find() || SQL_SYNTAX_PATTERN.matcher(value).find();
+        return value.contains("(") || SQL_COMMENT_PATTERN.matcher(value).find() || SQL_SYNTAX_PATTERN.matcher(value).find() || containsCaseWhen(value);
+    }
+
+    private static boolean containsCaseWhen(String value) {
+        int start = 0;
+        for (int i = 0; i <= value.length(); i++) {
+            if (i == value.length() || value.charAt(i) == ',') {
+                if (containsCaseWhenInItem(value, start, i)) {
+                    return true;
+                }
+                start = i + 1;
+            }
+        }
+        return false;
+    }
+
+    private static boolean containsCaseWhenInItem(String value, int start, int end) {
+        int caseIndex = indexOfWord(value, "case", start, end);
+        if (caseIndex < 0) {
+            return false;
+        }
+        int whenIndex = indexOfWord(value, "when", caseIndex + 4, end);
+        if (whenIndex < 0) {
+            return false;
+        }
+        int thenIndex = indexOfWord(value, "then", whenIndex + 4, end);
+        if (thenIndex < 0) {
+            return false;
+        }
+        return indexOfWord(value, "end", thenIndex + 4, end) >= 0;
+    }
+
+    private static int indexOfWord(String value, String word, int fromIndex, int endIndex) {
+        int maxIndex = endIndex - word.length();
+        for (int i = fromIndex; i <= maxIndex; i++) {
+            if (value.regionMatches(true, i, word, 0, word.length())
+                    && (i == 0 || !isWordChar(value.charAt(i - 1)))
+                    && (i + word.length() == endIndex || !isWordChar(value.charAt(i + word.length())))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static boolean isWordChar(char c) {
+        return Character.isLetterOrDigit(c) || c == '_';
     }
 }
