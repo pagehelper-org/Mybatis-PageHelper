@@ -25,6 +25,7 @@
 package com.github.pagehelper.dialect.rowbounds;
 
 import com.github.pagehelper.dialect.AbstractRowBoundsDialect;
+import com.github.pagehelper.parser.SqlParserUtil;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.session.RowBounds;
 
@@ -39,9 +40,13 @@ public class Db2RowBoundsDialect extends AbstractRowBoundsDialect {
     public String getPageSql(String sql, RowBounds rowBounds, CacheKey pageKey) {
         int startRow = rowBounds.getOffset() + 1;
         int endRow = rowBounds.getOffset() + rowBounds.getLimit();
+        String[] withPrefix = SqlParserUtil.splitWithPrefix(sql);
         StringBuilder sqlBuilder = new StringBuilder(sql.length() + 120);
+        if (withPrefix[0] != null) {
+            sqlBuilder.append(withPrefix[0]).append(' ');
+        }
         sqlBuilder.append("SELECT * FROM (SELECT TMP_PAGE.*,ROWNUMBER() OVER() AS PAGEHELPER_ROW_ID FROM ( \n");
-        sqlBuilder.append(sql);
+        sqlBuilder.append(withPrefix[1]);
         sqlBuilder.append("\n ) AS TMP_PAGE) TMP_PAGE WHERE PAGEHELPER_ROW_ID BETWEEN ");
         sqlBuilder.append(startRow);
         sqlBuilder.append(" AND ");

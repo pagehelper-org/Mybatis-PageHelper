@@ -26,6 +26,7 @@ package com.github.pagehelper.dialect.helper;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.dialect.AbstractHelperDialect;
+import com.github.pagehelper.parser.SqlParserUtil;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -51,10 +52,14 @@ public class OracleDialect extends AbstractHelperDialect {
 
     @Override
     public String getPageSql(String sql, Page page, CacheKey pageKey) {
+        String[] withPrefix = SqlParserUtil.splitWithPrefix(sql);
         StringBuilder sqlBuilder = new StringBuilder(sql.length() + 120);
+        if (withPrefix[0] != null) {
+            sqlBuilder.append(withPrefix[0]).append(' ');
+        }
         sqlBuilder.append("SELECT * FROM ( ");
         sqlBuilder.append(" SELECT TMP_PAGE.*, ROWNUM PAGEHELPER_ROW_ID FROM ( \n");
-        sqlBuilder.append(sql);
+        sqlBuilder.append(withPrefix[1]);
         sqlBuilder.append("\n ) TMP_PAGE)");
         sqlBuilder.append(" WHERE PAGEHELPER_ROW_ID <= ? AND PAGEHELPER_ROW_ID > ?");
         return sqlBuilder.toString();

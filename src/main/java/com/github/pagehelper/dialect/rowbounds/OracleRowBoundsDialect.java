@@ -25,6 +25,7 @@
 package com.github.pagehelper.dialect.rowbounds;
 
 import com.github.pagehelper.dialect.AbstractRowBoundsDialect;
+import com.github.pagehelper.parser.SqlParserUtil;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.session.RowBounds;
 
@@ -39,7 +40,11 @@ public class OracleRowBoundsDialect extends AbstractRowBoundsDialect {
     public String getPageSql(String sql, RowBounds rowBounds, CacheKey pageKey) {
         int startRow = rowBounds.getOffset();
         int endRow = rowBounds.getOffset() + rowBounds.getLimit();
+        String[] withPrefix = SqlParserUtil.splitWithPrefix(sql);
         StringBuilder sqlBuilder = new StringBuilder(sql.length() + 120);
+        if (withPrefix[0] != null) {
+            sqlBuilder.append(withPrefix[0]).append(' ');
+        }
         if (startRow > 0) {
             sqlBuilder.append("SELECT * FROM ( ");
         }
@@ -47,7 +52,7 @@ public class OracleRowBoundsDialect extends AbstractRowBoundsDialect {
             sqlBuilder.append(" SELECT TMP_PAGE.*, ROWNUM PAGEHELPER_ROW_ID FROM ( ");
         }
         sqlBuilder.append("\n");
-        sqlBuilder.append(sql);
+        sqlBuilder.append(withPrefix[1]);
         sqlBuilder.append("\n");
         if (endRow > 0) {
             sqlBuilder.append(" ) TMP_PAGE WHERE ROWNUM <= ");
