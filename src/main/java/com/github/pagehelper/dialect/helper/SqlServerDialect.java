@@ -31,7 +31,9 @@ import com.github.pagehelper.dialect.AbstractHelperDialect;
 import com.github.pagehelper.dialect.ReplaceSql;
 import com.github.pagehelper.dialect.replace.RegexWithNolockReplaceSql;
 import com.github.pagehelper.dialect.replace.SimpleWithNolockReplaceSql;
+import com.github.pagehelper.parser.CountSqlParser;
 import com.github.pagehelper.parser.SqlServerSqlParser;
+import com.github.pagehelper.parser.defaults.DefaultSqlServerCountSqlParser;
 import com.github.pagehelper.parser.defaults.DefaultSqlServerSqlParser;
 import com.github.pagehelper.util.ClassUtil;
 import com.github.pagehelper.util.StringUtil;
@@ -111,6 +113,11 @@ public class SqlServerDialect extends AbstractHelperDialect {
         }
 
         return page.isOrderByOnly() ? sql : this.getPageSql(sql, page, pageKey);
+    }
+
+    @Override
+    protected CountSqlParser createDefaultCountSqlParser() {
+        return new DefaultSqlServerCountSqlParser();
     }
 
     @Override

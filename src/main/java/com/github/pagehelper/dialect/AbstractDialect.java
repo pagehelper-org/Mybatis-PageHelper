@@ -52,9 +52,13 @@ public abstract class AbstractDialect implements Dialect {
         return countSqlParser.getSmartCountSql(boundSql.getSql());
     }
 
+    protected CountSqlParser createDefaultCountSqlParser() {
+        return new DefaultCountSqlParser();
+    }
+
     @Override
     public void setProperties(Properties properties) {
-        this.countSqlParser = ClassUtil.newInstance(properties.getProperty("countSqlParser"), CountSqlParser.class, properties, DefaultCountSqlParser::new);
+        this.countSqlParser = ClassUtil.newInstance(properties.getProperty("countSqlParser"), CountSqlParser.class, properties, this::createDefaultCountSqlParser);
         this.orderBySqlParser = ClassUtil.newInstance(properties.getProperty("orderBySqlParser"), OrderBySqlParser.class, properties, DefaultOrderBySqlParser::new);
     }
 }
