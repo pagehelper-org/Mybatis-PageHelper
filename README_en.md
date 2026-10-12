@@ -77,6 +77,9 @@ static {
     registerDialectAlias("dm",OracleDialect.class);
     //阿里云PPAS数据库,https://github.com/pagehelper/Mybatis-PageHelper/issues/281
     registerDialectAlias("edb",OracleDialect.class);
+    //PolarDB Oracle compatible mode
+    registerDialectAlias("polardb",OracleDialect.class);
+    registerDialectAlias("polardb2",OracleDialect.class);
     //神通数据库
     registerDialectAlias("oscar",OscarDialect.class);
     registerDialectAlias("clickhouse",MySqlDialect.class);

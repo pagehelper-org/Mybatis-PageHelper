@@ -44,6 +44,8 @@ public class DataSourceNegotiationAutoDialectTest {
     public static final String TOMCAT  = "jdbc:oracle://localhost/test";
     public static final String C3P0    = "jdbc:mysql://localhost/test";
     public static final String DBCP    = "jdbc:postgresql://localhost/test";
+    public static final String POLARDB = "jdbc:polardb://localhost/test";
+    public static final String POLARDB2 = "jdbc:polardb2://localhost/test";
     public static final String DEFAULT = "jdbc:hsqldb:mem:basetest";
 
     private HikariDataSource getHikari() {
@@ -123,6 +125,12 @@ public class DataSourceNegotiationAutoDialectTest {
         Assert.assertEquals(DBCP, dialectKey);
         dialect = autoDialect.extractDialect(dialectKey, null, getDbcp(), properties);
         Assert.assertTrue(dialect instanceof PostgreSqlDialect);
+
+        dialect = autoDialect.extractDialect(POLARDB, null, null, properties);
+        Assert.assertTrue(dialect instanceof OracleDialect);
+
+        dialect = autoDialect.extractDialect(POLARDB2, null, null, properties);
+        Assert.assertTrue(dialect instanceof OracleDialect);
 
         dialectKey = autoDialect.extractDialectKey(null, getDefault(), properties);
         Assert.assertEquals(DEFAULT, dialectKey);

@@ -63,6 +63,10 @@ public class PageAutoDialect {
 
         registerDialectAlias("postgresql", PostgreSqlDialect.class);
 
+        // PolarDB Oracle compatible mode.
+        registerDialectAlias("polardb", OracleDialect.class);
+        registerDialectAlias("polardb2", OracleDialect.class);
+
         registerDialectAlias("mysql", MySqlDialect.class);
         registerDialectAlias("mariadb", MySqlDialect.class);
         registerDialectAlias("sqlite", MySqlDialect.class);
