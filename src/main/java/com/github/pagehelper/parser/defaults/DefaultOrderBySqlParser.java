@@ -65,6 +65,10 @@ public class DefaultOrderBySqlParser implements OrderBySqlParser {
             }
             //新的sql
             sql = select.toString();
+            //通过语法树设置排序，保留 LIMIT、OFFSET、FETCH 等子句的位置
+            Select orderBySelect = (Select) SqlParserUtil.parse("SELECT 1 ORDER BY " + orderBy);
+            select.setOrderByElements(orderBySelect.getOrderByElements());
+            return select.toString();
         } catch (Throwable e) {
             log.warn("Failed to handle sorting: " + e + ", downgraded to a direct splice of the order by parameter");
         }
