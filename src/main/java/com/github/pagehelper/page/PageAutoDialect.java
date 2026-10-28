@@ -66,6 +66,7 @@ public class PageAutoDialect {
         registerDialectAlias("mysql", MySqlDialect.class);
         registerDialectAlias("mariadb", MySqlDialect.class);
         registerDialectAlias("sqlite", MySqlDialect.class);
+        registerDialectAlias("goldendb", MySqlDialect.class);
 
         registerDialectAlias("herddb", HerdDBDialect.class);
 
